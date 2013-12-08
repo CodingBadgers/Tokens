@@ -7,7 +7,7 @@ depend: [Citizens]
 
 commands:
     minekart:
-        description: MineKart Command
-        usage: /mk <command> <args>
-        aliases: [mk]
+        description: Tokens Command
+        usage: /tokens <command> <args>
+        aliases: [tk]
 
