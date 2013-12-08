@@ -1,0 +1,13 @@
+name: Tokens
+version: 1.0.0
+main: uk.thecodingbadgers.tokens.Tokens
+authors: [n3wton, TheFish97]
+description: Token collection and using plugin
+depend: [Citizens]
+
+commands:
+    minekart:
+        description: MineKart Command
+        usage: /mk <command> <args>
+        aliases: [mk]
+
