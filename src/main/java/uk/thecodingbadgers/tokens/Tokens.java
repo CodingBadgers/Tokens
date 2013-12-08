@@ -3,12 +3,15 @@ package uk.thecodingbadgers.tokens;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import uk.thecodingbadgers.tokens.database.DatabaseManager;
 import uk.thecodingbadgers.tokens.database.TokenUserData;
 import uk.thecodingbadgers.tokens.listeners.TokenUserListener;
+import uk.thecodingbadgers.tokens.rewards.MobArenaRewards;
 
 /**
  * @author TheCodingBadgers
@@ -42,6 +45,7 @@ public final class Tokens extends JavaPlugin {
 		// Register listeners
 		PluginManager pluginManager = this.getServer().getPluginManager();
 		pluginManager.registerEvents(new TokenUserListener(), this);
+		pluginManager.registerEvents(new MobArenaRewards(), this);
 	}
 
 	/**
@@ -74,6 +78,15 @@ public final class Tokens extends JavaPlugin {
 	 */
 	public Map<String, TokenUserData> getUsers() {
 		return this.users;
+	}
+
+	/** 
+	 * Output a message to a given command sender
+	 * @param destination The thing to output the message to 
+	 * @param message The message to output
+	 */
+	public void output(CommandSender destination, String message) {
+		destination.sendMessage(ChatColor.DARK_PURPLE + message);
 	}
 	
 }
