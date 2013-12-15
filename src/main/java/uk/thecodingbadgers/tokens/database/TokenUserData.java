@@ -13,8 +13,8 @@ public class TokenUserData extends DatabaseTableData {
 	 * @param tokenCount The number of tokens to award the player
 	 */
 	public void addTokens(int tokenCount) {
-		tokenCount += tokenCount;
-		totalTokenCount += tokenCount;
+		this.tokenCount += tokenCount;
+		this.totalTokenCount += tokenCount;
 	}
 
 }

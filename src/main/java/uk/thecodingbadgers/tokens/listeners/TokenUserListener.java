@@ -44,25 +44,7 @@ public class TokenUserListener implements Listener {
 		final String playerName = player.getName();
 		
 		final Tokens plugin = Tokens.getInstance();
-		
-		// This player is already loaded, huzzah!
-		if (plugin.getUsers().containsKey(playerName)) {
-			return;
-		}
-		
-		// This player already exists in the database, load them
-		if (plugin.getDatabaseManager().loadUser(playerName)) {
-			return;
-		}
-		
-		// New player, create them some data
-		final TokenUserData data = new TokenUserData();
-		data.playerName = playerName;
-		data.tokenCount = 0;
-		data.totalTokenCount = 0;
-		
-		plugin.getUsers().put(playerName, data);
-		plugin.getDatabaseManager().saveUser(data, true);
+		plugin.loadUser(playerName);
 		
 	}
 

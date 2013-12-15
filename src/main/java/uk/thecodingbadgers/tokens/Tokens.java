@@ -4,13 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import uk.thecodingbadgers.tokens.database.DatabaseManager;
 import uk.thecodingbadgers.tokens.database.TokenUserData;
 import uk.thecodingbadgers.tokens.listeners.TokenUserListener;
+import uk.thecodingbadgers.tokens.rewards.BaseReward;
 import uk.thecodingbadgers.tokens.rewards.MobArenaRewards;
 
 /**
@@ -45,7 +48,17 @@ public final class Tokens extends JavaPlugin {
 		// Register listeners
 		PluginManager pluginManager = this.getServer().getPluginManager();
 		pluginManager.registerEvents(new TokenUserListener(), this);
-		pluginManager.registerEvents(new MobArenaRewards(), this);
+		
+		
+		BaseReward maRewards = new MobArenaRewards();
+		if (maRewards.Load()) {
+			pluginManager.registerEvents(maRewards, this);
+		}
+		
+		for (Player player : this.getServer().getOnlinePlayers())
+		{
+			this.loadUser(player.getName());
+		}
 	}
 
 	/**
@@ -86,7 +99,57 @@ public final class Tokens extends JavaPlugin {
 	 * @param message The message to output
 	 */
 	public void output(CommandSender destination, String message) {
-		destination.sendMessage(ChatColor.DARK_PURPLE + message);
+		destination.sendMessage(ChatColor.GOLD + message);
 	}
+
+	/**
+	 * 
+	 * @param playerName
+	 */
+	public void loadUser(String playerName) {
+		
+		// This player is already loaded, huzzah!
+		if (this.getUsers().containsKey(playerName)) {
+			return;
+		}
+		
+		// This player already exists in the database, load them
+		if (this.getDatabaseManager().loadUser(playerName)) {
+			return;
+		}
+		
+		// New player, create them some data
+		final TokenUserData data = new TokenUserData();
+		data.playerName = playerName;
+		data.tokenCount = 0;
+		data.totalTokenCount = 0;
+		
+		this.getUsers().put(playerName, data);
+		this.getDatabaseManager().saveUser(data, true);
+	}
+	
+	/**
+	 * 
+	 */
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
+    	
+    	if (!cmd.getName().equalsIgnoreCase("tokens")) {
+			return false;
+		}
+    	
+    	if (args.length == 0) {
+    		if (!(sender instanceof Player))
+    			return true;
+    		
+    		Player player = (Player)sender;
+    		TokenUserData data = this.getUsers().get(player.getName());
+    		this.output(sender, "You currently have " + data.tokenCount + " tokens, and have collected " + data.totalTokenCount + " tokens in total.");
+    		return true;
+    	}
+    	
+    	return true; 
+    }
+
+
 	
 }

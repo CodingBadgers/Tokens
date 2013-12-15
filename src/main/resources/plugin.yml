@@ -6,7 +6,7 @@ description: Token collection and using plugin
 depend: [Citizens]
 
 commands:
-    minekart:
+    tokens:
         description: Tokens Command
         usage: /tokens <command> <args>
         aliases: [tk]
